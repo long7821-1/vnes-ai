@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,7 +16,7 @@
       <h1 class="text-3xl font-bold text-indigo-700">VNES AI</h1>
     </div>
 
-    <h2 class="text-xl font-semibold text-center text-gray-600 mb-6">🎯 Hỏi VNES AI </h2>
+    <h2 class="text-xl font-semibold text-center text-gray-600 mb-6">🎯 Hỏi VNES AI bằng hình ảnh</h2>
 
     <form id="askForm" enctype="multipart/form-data" class="space-y-4">
       <div>
@@ -40,33 +40,47 @@
 
     <div id="result" class="mt-6 p-4 bg-gray-50 border rounded-lg hidden">
       <h2 class="text-lg font-semibold mb-2 text-indigo-500">🧠 Trả lời từ VNES AI:</h2>
-      <p id="answer" class="whitespace-pre-line text-gray-700"></p>
+      <img id="answerImage" class="max-w-full rounded-lg mb-3 hidden" />
+      <p id="answerText" class="whitespace-pre-line text-gray-700"></p>
     </div>
   </div>
 
   <script>
     const form = document.getElementById('askForm');
-    const answerBox = document.getElementById('answer');
+    const answerText = document.getElementById('answerText');
+    const answerImage = document.getElementById('answerImage');
     const resultBox = document.getElementById('result');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      answerBox.textContent = "⏳ Đang gửi câu hỏi...";
+      answerText.textContent = "⏳ Đang gửi câu hỏi...";
+      answerImage.classList.add("hidden");
       resultBox.classList.remove("hidden");
 
       const formData = new FormData(form);
 
       try {
-        const response = await fetch('/ask-image', {
+        const res = await fetch('/ask-image', {
           method: 'POST',
           body: formData
         });
 
-        const result = await response.json();
-        answerBox.textContent = result.answer || `❌ ${result.error}`;
+        const contentType = res.headers.get("content-type");
+
+        if (contentType && contentType.includes("image")) {
+          const blob = await res.blob();
+          const url = URL.createObjectURL(blob);
+          answerImage.src = url;
+          answerImage.classList.remove("hidden");
+          answerText.textContent = "";
+        } else {
+          const data = await res.json();
+          answerImage.classList.add("hidden");
+          answerText.textContent = data.answer || `❌ ${data.error}`;
+        }
+
       } catch (err) {
-        answerBox.textContent = "❌ Lỗi gửi yêu cầu!";
+        answerText.textContent = "❌ Đã xảy ra lỗi khi gửi yêu cầu.";
       }
     });
   </script>
