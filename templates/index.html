@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VNES AI - Hỏi kèm hình ảnh</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+  <div class="max-w-2xl mx-auto mt-12 p-8 bg-white rounded-xl shadow-lg">
+
+    <!-- 🖼️ Logo VNES -->
+    <div class="flex items-center justify-center mb-4">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="VNES Logo" class="h-16 mr-3" />
+      <h1 class="text-3xl font-bold text-indigo-700">VNES AI</h1>
+    </div>
+
+    <h2 class="text-xl font-semibold text-center text-gray-600 mb-6">🎯 Hỏi VNES AI </h2>
+
+    <form id="askForm" enctype="multipart/form-data" class="space-y-4">
+      <div>
+        <label for="question" class="block font-semibold mb-1">Câu hỏi:</label>
+        <input type="text" name="question" id="question" required
+               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+               placeholder="Nhập câu hỏi tại đây..." />
+      </div>
+
+      <div>
+        <label for="image" class="block font-semibold mb-1">Tải hình ảnh lên:</label>
+        <input type="file" name="image" id="image" accept="image/*" required
+               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none file:bg-indigo-500 file:text-white file:font-semibold file:px-4 file:py-2 file:rounded file:mr-4" />
+      </div>
+
+      <button type="submit"
+              class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-200 w-full">
+        🚀 Gửi câu hỏi
+      </button>
+    </form>
+
+    <div id="result" class="mt-6 p-4 bg-gray-50 border rounded-lg hidden">
+      <h2 class="text-lg font-semibold mb-2 text-indigo-500">🧠 Trả lời từ VNES AI:</h2>
+      <p id="answer" class="whitespace-pre-line text-gray-700"></p>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('askForm');
+    const answerBox = document.getElementById('answer');
+    const resultBox = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      answerBox.textContent = "⏳ Đang gửi câu hỏi...";
+      resultBox.classList.remove("hidden");
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch('/ask-image', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        answerBox.textContent = result.answer || `❌ ${result.error}`;
+      } catch (err) {
+        answerBox.textContent = "❌ Lỗi gửi yêu cầu!";
+      }
+    });
+  </script>
+</body>
+</html>

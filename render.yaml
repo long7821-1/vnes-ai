@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: vnes-ai
+    env: python
+    buildCommand: ""
+    startCommand: python app.py
+    envVars:
+      - key: GEMINI_API_KEY
+        value: YOUR_GEMINI_KEY_HERE  # Hoặc để trống rồi nhập sau trong Render
