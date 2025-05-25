@@ -37,6 +37,7 @@
         <select name="ai" id="ai" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
           <option value="vnes_ai">VNES AI</option>
           <option value="deepseek">DeepSeek</option>
+          <option value="openrouter">ChatGPT (OpenRouter)</option>
         </select>
       </div>
 
@@ -72,7 +73,7 @@
       const selectedAI = document.getElementById('ai').value;
 
       // Cập nhật tiêu đề nguồn trả lời dựa trên AI được chọn
-      answerSource.textContent = `🧠 Trả lời từ ${selectedAI === 'vnes_ai' ? 'VNES AI' : 'DeepSeek'}:`;
+      answerSource.textContent = `🧠 Trả lời từ ${selectedAI === 'vnes_ai' ? 'VNES AI' : selectedAI === 'deepseek' ? 'DeepSeek' : 'ChatGPT (OpenRouter)'}:`;
 
       try {
         const res = await fetch('/ask-image', {
@@ -96,7 +97,7 @@
 
           if (res.ok) {
             answerText.textContent = data.answer || "✅ Đã nhận được phản hồi.";
-            answerSource.textContent = `🧠 Trả lời từ ${data.ai === 'vnes_ai' ? 'VNES AI' : 'DeepSeek'}:`; // Cập nhật từ backend
+            answerSource.textContent = `🧠 Trả lời từ ${data.ai === 'vnes_ai' ? 'VNES AI' : data.ai === 'deepseek' ? 'DeepSeek' : 'ChatGPT (OpenRouter)'}:`; // Cập nhật từ backend
             form.reset(); // Reset form sau khi gửi thành công
           } else {
             answerText.textContent = `❌ Lỗi: ${data.error || "Không rõ nguyên nhân."}`;
