@@ -21,9 +21,9 @@
     <form id="askForm" enctype="multipart/form-data" class="space-y-4">
       <div>
         <label for="question" class="block font-semibold mb-1">Câu hỏi:</label>
-        <input type="text" name="question" id="question" required
-               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-               placeholder="Nhập câu hỏi tại đây..." />
+        <textarea name="question" id="question" required rows="4"
+                  class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-y"
+                  placeholder="Nhập câu hỏi tại đây... (có thể xuống dòng)"></textarea>
       </div>
 
       <div>
@@ -35,9 +35,9 @@
       <div>
         <label for="ai" class="block font-semibold mb-1">Chọn AI:</label>
         <select name="ai" id="ai" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          <option value="vnes_ai">VNES AI</option>
-          <option value="deepseek">DeepSeek</option>
-          <option value="openrouter">ChatGPT (OpenRouter)</option>
+          <option value="vnes_ai">Chi VNES AI</option>
+          <option value="deepseek">Chi DeepSeek</option>
+          <option value="openrouter">Chi ChatGPT (OpenRouter)</option>
         </select>
       </div>
 
@@ -47,40 +47,37 @@
       </button>
     </form>
 
-    <div id="result" class="mt-6 p-4 bg-gray-50 border rounded-lg hidden">
-      <div class="flex justify-between items-center mb-2">
-        <h2 id="answerSource" class="text-lg font-semibold text-indigo-500">🧠 Trả lời từ:</h2>
-        <button id="copyButton" class="bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-semibold py-1 px-3 rounded-lg transition duration-200 hidden">
-          📋 Sao chép
-        </button>
-      </div>
-      <img id="answerImage" class="max-w-full rounded-lg mb-3 hidden" alt="Ảnh trả lời" />
-      <p id="answerText" class="whitespace-pre-line text-gray-700"></p>
-    </div>
+    <div id="history" class="mt-6 space-y-4"></div>
   </div>
 
   <script>
     const form = document.getElementById('askForm');
-    const answerText = document.getElementById('answerText');
-    const answerImage = document.getElementById('answerImage');
-    const resultBox = document.getElementById('result');
-    const answerSource = document.getElementById('answerSource');
-    const copyButton = document.getElementById('copyButton');
+    const historyDiv = document.getElementById('history');
+    let historyCounter = 0;
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Hiện trạng thái loading
-      answerText.textContent = "⏳ Đang gửi câu hỏi...";
-      answerImage.classList.add("hidden");
-      copyButton.classList.add("hidden"); // Ẩn nút sao chép khi đang tải
-      resultBox.classList.remove("hidden");
-
+      const questionInput = document.getElementById('question');
+      const imageInput = document.getElementById('image');
+      const aiInput = document.getElementById('ai');
       const formData = new FormData(form);
-      const selectedAI = document.getElementById('ai').value;
+      const selectedAI = aiInput.value;
+      const questionText = questionInput.value;
 
-      // Cập nhật tiêu đề nguồn trả lời dựa trên AI được chọn
-      answerSource.textContent = `🧠 Trả lời từ ${selectedAI === 'vnes_ai' ? 'VNES AI' : selectedAI === 'deepseek' ? 'DeepSeek' : 'ChatGPT (OpenRouter)'}:`;
+      // Tạo phần lịch sử mới
+      historyCounter++;
+      const historyItem = document.createElement('div');
+      historyItem.className = 'p-4 bg-gray-50 border rounded-lg';
+      historyItem.id = `history-${historyCounter}`;
+      historyItem.innerHTML = `
+        <h2 class="text-lg font-semibold text-indigo-500">Câu hỏi ${historyCounter} (AI: ${selectedAI === 'vnes_ai' ? 'VNES AI' : selectedAI === 'deepseek' ? 'DeepSeek' : 'ChatGPT (OpenRouter)'}):</h2>
+        <pre class="text-gray-700 mb-2 whitespace-pre-wrap">${questionText}</pre>
+        <p id="answerText-${historyCounter}" class="whitespace-pre-line text-gray-700">⏳ Đang gửi câu hỏi...</p>
+        <img id="answerImage-${historyCounter}" class="max-w-full rounded-lg mb-3 hidden" alt="Ảnh trả lời" />
+        <button id="copyButton-${historyCounter}" class="bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-semibold py-1 px-3 rounded-lg transition duration-200 hidden">📋 Sao chép</button>
+      `;
+      historyDiv.prepend(historyItem);
 
       try {
         const res = await fetch('/ask-image', {
@@ -89,64 +86,61 @@
         });
 
         const contentType = res.headers.get("content-type");
+        const answerText = document.getElementById(`answerText-${historyCounter}`);
+        const answerImage = document.getElementById(`answerImage-${historyCounter}`);
+        const copyButton = document.getElementById(`copyButton-${historyCounter}`);
 
         if (contentType && contentType.includes("image")) {
-          // Nếu backend trả về ảnh (ví dụ ảnh đáp án Toán)
           const blob = await res.blob();
           const url = URL.createObjectURL(blob);
           answerImage.src = url;
           answerImage.classList.remove("hidden");
           answerText.textContent = "";
           copyButton.classList.remove("hidden");
-          copyButton.disabled = true; // Vô hiệu hóa nút sao chép cho hình ảnh
+          copyButton.disabled = true;
           copyButton.textContent = "📋 Không thể sao chép ảnh";
         } else if (contentType && contentType.includes("application/json")) {
-          // Nếu backend trả về JSON
           const data = await res.json();
           answerImage.classList.add("hidden");
 
           if (res.ok) {
             answerText.textContent = data.answer || "✅ Đã nhận được phản hồi.";
-            answerSource.textContent = `🧠 Trả lời từ ${data.ai === 'vnes_ai' ? 'VNES AI' : data.ai === 'deepseek' ? 'DeepSeek' : 'ChatGPT (OpenRouter)'}:`;
             copyButton.classList.remove("hidden");
             copyButton.disabled = false;
             copyButton.textContent = "📋 Sao chép";
-            form.reset(); // Reset form sau khi gửi thành công
           } else {
             answerText.textContent = `❌ Lỗi: ${data.error || "Không rõ nguyên nhân."}`;
             copyButton.classList.add("hidden");
           }
         } else {
-          // Trường hợp khác
           answerText.textContent = "❌ Đã nhận phản hồi không đúng định dạng. Vui lòng kiểm tra log.";
           answerImage.classList.add("hidden");
           copyButton.classList.add("hidden");
         }
 
-      } catch (err) {
-        answerText.textContent = `❌ Đã xảy ra lỗi: ${err.message || "Kết nối thất bại."}`;
-        answerImage.classList.add("hidden");
-        copyButton.classList.add("hidden");
-      }
-    });
-
-    // Xử lý sự kiện sao chép
-    copyButton.addEventListener('click', () => {
-      if (answerImage.classList.contains("hidden")) {
-        // Nếu là text, sao chép nội dung
-        const textToCopy = answerText.textContent;
-        navigator.clipboard.writeText(textToCopy).then(() => {
-          copyButton.textContent = "✅ Đã sao chép!";
-          setTimeout(() => {
-            copyButton.textContent = "📋 Sao chép";
-          }, 2000); // Trở lại trạng thái ban đầu sau 2 giây
-        }).catch(err => {
-          copyButton.textContent = "❌ Lỗi sao chép";
-          console.error("Lỗi sao chép:", err);
+        // Xử lý sự kiện sao chép
+        copyButton.addEventListener('click', () => {
+          if (answerImage.classList.contains("hidden")) {
+            const textToCopy = answerText.textContent;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+              copyButton.textContent = "✅ Đã sao chép!";
+              setTimeout(() => {
+                copyButton.textContent = "📋 Sao chép";
+              }, 2000);
+            }).catch(err => {
+              copyButton.textContent = "❌ Lỗi sao chép";
+              console.error("Lỗi sao chép:", err);
+            });
+          }
         });
-      } else {
-        // Nếu là hình ảnh, không làm gì (nút đã bị vô hiệu hóa)
-        return;
+
+        // Reset
+        questionInput.value = '';
+        imageInput.value = '';
+
+      } catch (err) {
+        const answerText = document.getElementById(`answerText-${historyCounter}`);
+        answerText.textContent = `❌ Đã xảy ra lỗi: ${err.message || "Kết nối thất bại."}`;
       }
     });
   </script>
