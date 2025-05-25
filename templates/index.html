@@ -32,8 +32,13 @@
                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none file:bg-indigo-500 file:text-white file:font-semibold file:px-4 file:py-2 file:rounded file:mr-4" />
       </div>
 
-      <!-- Chỉ giữ Gemini -->
-      <input type="hidden" name="ai" id="ai" value="gemini" />
+      <div>
+        <label for="ai" class="block font-semibold mb-1">Chọn AI:</label>
+        <select name="ai" id="ai" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <option value="vnes_ai">VNES AI</option>
+          <option value="deepseek">DeepSeek</option>
+        </select>
+      </div>
 
       <button type="submit"
               class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-200 w-full">
@@ -42,7 +47,7 @@
     </form>
 
     <div id="result" class="mt-6 p-4 bg-gray-50 border rounded-lg hidden">
-      <h2 id="answerSource" class="text-lg font-semibold mb-2 text-indigo-500">🧠 Trả lời từ VNES AI:</h2>
+      <h2 id="answerSource" class="text-lg font-semibold mb-2 text-indigo-500">🧠 Trả lời từ:</h2>
       <img id="answerImage" class="max-w-full rounded-lg mb-3 hidden" alt="Ảnh trả lời" />
       <p id="answerText" class="whitespace-pre-line text-gray-700"></p>
     </div>
@@ -64,8 +69,10 @@
       resultBox.classList.remove("hidden");
 
       const formData = new FormData(form);
+      const selectedAI = document.getElementById('ai').value;
 
-      answerSource.textContent = "🧠 Trả lời từ VNES AI:";
+      // Cập nhật tiêu đề nguồn trả lời dựa trên AI được chọn
+      answerSource.textContent = `🧠 Trả lời từ ${selectedAI === 'vnes_ai' ? 'VNES AI' : 'DeepSeek'}:`;
 
       try {
         const res = await fetch('/ask-image', {
@@ -76,23 +83,27 @@
         const contentType = res.headers.get("content-type");
 
         if (contentType && contentType.includes("image")) {
+          // Nếu backend trả về ảnh (ví dụ ảnh đáp án Toán)
           const blob = await res.blob();
           const url = URL.createObjectURL(blob);
           answerImage.src = url;
           answerImage.classList.remove("hidden");
           answerText.textContent = "";
         } else if (contentType && contentType.includes("application/json")) {
+          // Nếu backend trả về JSON
           const data = await res.json();
           answerImage.classList.add("hidden");
 
           if (res.ok) {
             answerText.textContent = data.answer || "✅ Đã nhận được phản hồi.";
-            form.reset();
+            answerSource.textContent = `🧠 Trả lời từ ${data.ai === 'vnes_ai' ? 'VNES AI' : 'DeepSeek'}:`; // Cập nhật từ backend
+            form.reset(); // Reset form sau khi gửi thành công
           } else {
             answerText.textContent = `❌ Lỗi: ${data.error || "Không rõ nguyên nhân."}`;
           }
         } else {
-          answerText.textContent = "❌ Đã nhận phản hồi không đúng định dạng.";
+          // Trường hợp khác
+          answerText.textContent = "❌ Đã nhận phản hồi không đúng định dạng. Vui lòng kiểm tra log.";
           answerImage.classList.add("hidden");
         }
 
