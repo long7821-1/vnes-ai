@@ -1,6 +1,7 @@
 import os
 import io
 import base64
+import time
 from flask import Flask, request, jsonify, render_template, send_file
 from dotenv import load_dotenv
 from flask_cors import CORS
@@ -13,19 +14,27 @@ import google.generativeai as genai
 load_dotenv()
 
 # Cấu hình VNES AI API (sử dụng Gemini backend)
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+gemini_key = os.getenv("GEMINI_API_KEY")
+if not gemini_key:
+    raise ValueError("GEMINI_API_KEY không được thiết lập. Vui lòng thêm key trong Render Environment Variables.")
+genai.configure(api_key=gemini_key)
+print("🔧 GEMINI_API_KEY loaded:", gemini_key[:10] + "..." if gemini_key else "Chưa đặt")
 
 # Cấu hình DeepSeek API
+deepseek_key = os.getenv("DEEPSEEK_API_KEY")
+if not deepseek_key:
+    raise ValueError("DEEPSEEK_API_KEY không được thiết lập. Vui lòng thêm key trong Render Environment Variables.")
 deepseek_client = OpenAI(
-    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    api_key=deepseek_key,
     base_url="https://api.deepseek.com"
 )
+print("🔧 DEEPSEEK_API_KEY loaded:", deepseek_key[:10] + "..." if deepseek_key else "Chưa đặt")
 
 # Cấu hình OpenRouter API
 openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
 if not openrouter_api_key:
-    raise ValueError("OPENROUTER_API_KEY không được thiết lập trong .env. Vui lòng thêm key từ https://openrouter.ai/")
-print("🔑 OpenRouter API Key detected and loaded successfully.")
+    raise ValueError("OPENROUTER_API_KEY không được thiết lập trong Render Environment Variables. Vui lòng thêm key từ https://openrouter.ai/")
+print("🔑 OpenRouter API Key loaded:", openrouter_api_key[:10] + "...")
 openrouter_client = OpenAI(
     api_key=openrouter_api_key,
     base_url="https://openrouter.ai/api/v1"
@@ -55,98 +64,122 @@ def generate_math_image(text):
         return None
 
 # Gửi tới VNES AI (sử dụng Gemini backend)
-def ask_vnes_ai(question, image):
-    try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
-        if image:
-            image = Image.open(image).convert("RGB")
-            response = model.generate_content([question, image])
-        else:
-            response = model.generate_content(question)
-
-        # Xử lý phản hồi từ VNES AI
-        if hasattr(response, 'text'):
-            answer = response.text
-        elif hasattr(response, 'candidates') and response.candidates:
-            candidate = response.candidates[0]
-            if hasattr(candidate, 'content') and hasattr(candidate.content, 'parts'):
-                answer = candidate.content.parts[0].text if hasattr(candidate.content.parts[0], 'text') else str(candidate.content.parts[0])
+def ask_vnes_ai(question, image, retries=2, delay=60):
+    for attempt in range(retries + 1):
+        try:
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            print(f"🔍 Sending request to VNES AI (Gemini), attempt {attempt + 1}/{retries + 1}...")
+            if image:
+                image = Image.open(image).convert("RGB")
+                response = model.generate_content([question, image])
             else:
-                raise ValueError("VNES AI không có nội dung hợp lệ trong candidates. Phản hồi: " + str(response))
-        elif hasattr(response, 'parts') and response.parts:
-            answer = response.parts[0].text if hasattr(response.parts[0], 'text') else str(response.parts[0])
-        else:
-            raise ValueError("VNES AI không trả về nội dung hợp lệ. Phản hồi: " + str(response))
+                response = model.generate_content(question)
 
-        if is_math_question(question):
-            return {"image": generate_math_image(answer), "ai": "vnes_ai"}
-        return {"text": answer, "ai": "vnes_ai"}
-    except Exception as e:
-        print("❌ VNES AI error:", e)
-        return {"error": str(e), "ai": "vnes_ai"}
+            if hasattr(response, 'text'):
+                answer = response.text
+            elif hasattr(response, 'candidates') and response.candidates:
+                candidate = response.candidates[0]
+                if hasattr(candidate, 'content') and hasattr(candidate.content, 'parts'):
+                    answer = candidate.content.parts[0].text if hasattr(candidate.content.parts[0], 'text') else str(candidate.content.parts[0])
+                else:
+                    raise ValueError("VNES AI không có nội dung hợp lệ trong candidates. Phản hồi: " + str(response))
+            elif hasattr(response, 'parts') and response.parts:
+                answer = response.parts[0].text if hasattr(response.parts[0], 'text') else str(response.parts[0])
+            else:
+                raise ValueError("VNES AI không trả về nội dung hợp lệ. Phản hồi: " + str(response))
+
+            print(f"✅ VNES AI responded: {answer[:50]}...")
+            if is_math_question(question):
+                return {"image": generate_math_image(answer), "ai": "vnes_ai"}
+            return {"text": answer, "ai": "vnes_ai"}
+        except Exception as e:
+            error_message = str(e)
+            if "rate_limit_error" in error_message or "400" in error_message:
+                if attempt < retries:
+                    print(f"⚠️ VNES AI rate limit error. Retrying in {delay} seconds...")
+                    time.sleep(delay)
+                    continue
+                error_message = "Vượt quá giới hạn tốc độ VNES AI. Vui lòng thử lại sau vài phút."
+            print("❌ VNES AI error:", error_message)
+            return {"error": error_message, "ai": "vnes_ai"}
 
 # Gửi tới DeepSeek API
-def ask_deepseek(question, image):
-    try:
-        if image:
-            return {"error": "DeepSeek API hiện không hỗ trợ hình ảnh.", "ai": "deepseek"}
+def ask_deepseek(question, image, retries=2, delay=60):
+    for attempt in range(retries + 1):
+        try:
+            if image:
+                return {"error": "DeepSeek API hiện không hỗ trợ hình ảnh.", "ai": "deepseek"}
 
-        response = deepseek_client.chat.completions.create(
-            model="deepseek-chat",
-            messages=[{"role": "user", "content": question}],
-            max_tokens=1024
-        )
-        answer = response.choices[0].message.content
+            print(f"🔍 Sending request to DeepSeek, attempt {attempt + 1}/{retries + 1}...")
+            response = deepseek_client.chat.completions.create(
+                model="deepseek-chat",
+                messages=[{"role": "user", "content": question}],
+                max_tokens=1024
+            )
+            answer = response.choices[0].message.content
+            print(f"✅ DeepSeek responded: {answer[:50]}...")
 
-        if is_math_question(question):
-            return {"image": generate_math_image(answer), "ai": "deepseek"}
-        return {"text": answer, "ai": "deepseek"}
-    except Exception as e:
-        print("❌ DeepSeek error:", e)
-        return {"error": str(e), "ai": "deepseek"}
+            if is_math_question(question):
+                return {"image": generate_math_image(answer), "ai": "deepseek"}
+            return {"text": answer, "ai": "deepseek"}
+        except Exception as e:
+            error_message = str(e)
+            if "429" in error_message:
+                if attempt < retries:
+                    print(f"⚠️ DeepSeek rate limit error. Retrying in {delay} seconds...")
+                    time.sleep(delay)
+                    continue
+                error_message = "Vượt quá giới hạn tốc độ DeepSeek. Vui lòng thử lại sau vài phút."
+            print("❌ DeepSeek error:", error_message)
+            return {"error": error_message, "ai": "deepseek"}
 
-# Gửi tới OpenRouter API (với mô hình trả phí ChatGPT, hỗ trợ hình ảnh)
-def ask_openrouter(question, image):
-    try:
-        # Sử dụng mô hình trả phí (ChatGPT, hỗ trợ hình ảnh)
-        model = "openai/gpt-4o"  # Mô hình trả phí, hỗ trợ hình ảnh, yêu cầu tài khoản OpenRouter có số dư
-        # Nếu không muốn hỗ trợ hình ảnh, có thể dùng "openai/gpt-3.5-turbo"
-        # Nếu muốn thử mô hình miễn phí, thay bằng: "meta-llama/llama-3.1-8b-instruct:free"
+# Gửi tới OpenRouter API
+def ask_openrouter(question, image, retries=2, delay=60):
+    for attempt in range(retries + 1):
+        try:
+            model = "openai/gpt-4o"
+            messages = [{"role": "user", "content": question}]
+            print(f"🔍 Sending request to OpenRouter with model: {model}, attempt {attempt + 1}/{retries + 1}...")
 
-        messages = [{"role": "user", "content": question}]
+            if image:
+                image = Image.open(image).convert("RGB")
+                buffered = io.BytesIO()
+                image.save(buffered, format="PNG")
+                img_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
+                messages.append({
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": question},
+                        {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{img_base64}"}}
+                    ]
+                })
+                print("📷 Image included in request.")
 
-        if image:
-            # Mã hóa hình ảnh thành base64
-            image = Image.open(image).convert("RGB")
-            buffered = io.BytesIO()
-            image.save(buffered, format="PNG")
-            img_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
-            messages.append({
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": question},
-                    {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{img_base64}"}}
-                ]
-            })
+            response = openrouter_client.chat.completions.create(
+                model=model,
+                messages=messages if not image else messages[1:],
+                max_tokens=1024
+            )
+            answer = response.choices[0].message.content
+            print(f"✅ OpenRouter responded: {answer[:50]}...")
 
-        response = openrouter_client.chat.completions.create(
-            model=model,
-            messages=messages if not image else messages[1:],  # Nếu có hình ảnh, chỉ gửi tin nhắn có hình
-            max_tokens=1024
-        )
-        answer = response.choices[0].message.content
-
-        if is_math_question(question):
-            return {"image": generate_math_image(answer), "ai": "openrouter"}
-        return {"text": answer, "ai": "openrouter"}
-    except Exception as e:
-        error_message = str(e)
-        if "402" in error_message:
-            error_message = "Tài khoản OpenRouter không đủ số dư để sử dụng mô hình trả phí. Vui lòng nạp thêm tiền tại https://openrouter.ai/credits."
-        elif "401" in error_message:
-            error_message = "Lỗi xác thực OpenRouter: Key không hợp lệ hoặc không được thiết lập. Vui lòng kiểm tra OPENROUTER_API_KEY trong .env."
-        print("❌ OpenRouter error:", error_message)
-        return {"error": error_message, "ai": "openrouter"}
+            if is_math_question(question):
+                return {"image": generate_math_image(answer), "ai": "openrouter"}
+            return {"text": answer, "ai": "openrouter"}
+        except Exception as e:
+            error_message = str(e)
+            print(f"❌ OpenRouter error on attempt {attempt + 1}: {error_message}")
+            if "401" in error_message:
+                error_message = "Lỗi xác thực OpenRouter: Key không hợp lệ. Vui lòng kiểm tra lại OPENROUTER_API_KEY trong Render Environment."
+            elif "402" in error_message:
+                error_message = "Tài khoản OpenRouter không đủ số dư. Vui lòng nạp thêm tiền tại https://openrouter.ai/credits."
+            elif "429" in error_message:
+                if attempt < retries:
+                    print(f"⚠️ OpenRouter rate limit error. Retrying in {delay} seconds...")
+                    time.sleep(delay)
+                    continue
+                error_message = "Vượt quá giới hạn tốc độ OpenRouter. Vui lòng thử lại sau vài phút."
+            return {"error": error_message, "ai": "openrouter"}
 
 # Giao diện
 @app.route('/')
@@ -178,10 +211,4 @@ def ask_with_image():
         return jsonify({"error": result.get("error", "Lỗi không xác định."), "ai": result["ai"]}), 500
 
 if __name__ == '__main__':
-    gemini_key = os.getenv("GEMINI_API_KEY")
-    deepseek_key = os.getenv("DEEPSEEK_API_KEY")
-    openrouter_key = os.getenv("OPENROUTER_API_KEY")
-    print("🔧 GEMINI_API_KEY (dùng cho VNES AI):", (gemini_key[:10] + "...") if gemini_key else "Chưa đặt")
-    print("🔧 DEEPSEEK_API_KEY:", (deepseek_key[:10] + "...") if deepseek_key else "Chưa đặt")
-    print("🔧 OPENROUTER_API_KEY:", (openrouter_key[:10] + "...") if openrouter_key else "Chưa đặt")
     app.run(host='0.0.0.0', port=5000, debug=True)
