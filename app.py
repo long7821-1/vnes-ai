@@ -4,6 +4,7 @@ import base64
 from flask import Flask, request, jsonify, render_template, send_file
 from dotenv import load_dotenv
 from flask_cors import CORS
+from openai import OpenAI
 from PIL import Image
 import matplotlib.pyplot as plt
 import google.generativeai as genai
@@ -11,8 +12,14 @@ import google.generativeai as genai
 # Load biến môi trường
 load_dotenv()
 
-# Cấu hình Gemini API
+# Cấu hình VNES AI API (sử dụng Gemini API backend)
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+# Cấu hình DeepSeek API
+deepseek_client = OpenAI(
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com"
+)
 
 app = Flask(__name__)
 CORS(app)
@@ -37,29 +44,56 @@ def generate_math_image(text):
         print("❌ Lỗi tạo ảnh:", e)
         return None
 
-# Gửi tới Gemini 1.5 Flash
-def ask_gemini(question, image):
+# Gửi tới VNES AI (sử dụng Gemini backend)
+def ask_vnes_ai(question, image):
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-1.5-flash")  # Sử dụng mô hình Gemini làm backend
         if image:
             image = Image.open(image).convert("RGB")
             response = model.generate_content([question, image])
         else:
             response = model.generate_content(question)
 
+        # Xử lý phản hồi từ VNES AI
         if hasattr(response, 'text'):
             answer = response.text
+        elif hasattr(response, 'candidates') and response.candidates:
+            candidate = response.candidates[0]
+            if hasattr(candidate, 'content') and hasattr(candidate.content, 'parts'):
+                answer = candidate.content.parts[0].text if hasattr(candidate.content.parts[0], 'text') else str(candidate.content.parts[0])
+            else:
+                raise ValueError("VNES AI không có nội dung hợp lệ trong candidates. Phản hồi: " + str(response))
         elif hasattr(response, 'parts') and response.parts:
-            answer = response.parts[0].text if response.parts[0].text else str(response.parts)
+            answer = response.parts[0].text if hasattr(response.parts[0], 'text') else str(response.parts[0])
         else:
-            raise ValueError("Gemini API không trả về nội dung hợp lệ.")
+            raise ValueError("VNES AI không trả về nội dung hợp lệ. Phản hồi: " + str(response))
 
         if is_math_question(question):
-            return {"image": generate_math_image(answer), "ai": "gemini"}
-        return {"text": answer, "ai": "gemini"}
+            return {"image": generate_math_image(answer), "ai": "vnes_ai"}
+        return {"text": answer, "ai": "vnes_ai"}
     except Exception as e:
-        print("❌ Gemini error:", e)
-        return {"error": str(e), "ai": "gemini"}
+        print("❌ VNES AI error:", e)
+        return {"error": str(e), "ai": "vnes_ai"}
+
+# Gửi tới DeepSeek API
+def ask_deepseek(question, image):
+    try:
+        if image:
+            return {"error": "DeepSeek API hiện không hỗ trợ hình ảnh.", "ai": "deepseek"}
+
+        response = deepseek_client.chat.completions.create(
+            model="deepseek-chat",  # Hoặc "deepseek-reasoner"
+            messages=[{"role": "user", "content": question}],
+            max_tokens=1024
+        )
+        answer = response.choices[0].message.content
+
+        if is_math_question(question):
+            return {"image": generate_math_image(answer), "ai": "deepseek"}
+        return {"text": answer, "ai": "deepseek"}
+    except Exception as e:
+        print("❌ DeepSeek error:", e)
+        return {"error": str(e), "ai": "deepseek"}
 
 # Giao diện
 @app.route('/')
@@ -71,11 +105,15 @@ def home():
 def ask_with_image():
     question = request.form.get('question')
     image = request.files.get('image')
+    ai_model = request.form.get('ai', 'vnes_ai')
 
     if not question:
-        return jsonify({"error": "Câu hỏi không được để trống.", "ai": "gemini"}), 400
+        return jsonify({"error": "Câu hỏi không được để trống.", "ai": ai_model}), 400
 
-    result = ask_gemini(question, image)
+    if ai_model == "deepseek":
+        result = ask_deepseek(question, image)
+    else:
+        result = ask_vnes_ai(question, image)
 
     if "image" in result:
         return send_file(result["image"], mimetype='image/png')
@@ -86,5 +124,7 @@ def ask_with_image():
 
 if __name__ == '__main__':
     gemini_key = os.getenv("GEMINI_API_KEY")
-    print("🔧 GEMINI_API_KEY:", (gemini_key[:10] + "...") if gemini_key else "Chưa đặt")
+    deepseek_key = os.getenv("DEEPSEEK_API_KEY")
+    print("🔧 GEMINI_API_KEY (dùng cho VNES AI):", (gemini_key[:10] + "...") if gemini_key else "Chưa đặt")
+    print("🔧 DEEPSEEK_API_KEY:", (deepseek_key[:10] + "...") if deepseek_key else "Chưa đặt")
     app.run(host='0.0.0.0', port=5000, debug=True)
