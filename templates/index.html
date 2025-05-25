@@ -32,13 +32,8 @@
                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none file:bg-indigo-500 file:text-white file:font-semibold file:px-4 file:py-2 file:rounded file:mr-4" />
       </div>
 
-      <div>
-        <label for="ai" class="block font-semibold mb-1">Chọn AI:</label>
-        <select name="ai" id="ai" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          <option value="openai">Chat GPT</option>
-          <option value="gemini" selected>VNES AI</option>
-        </select>
-      </div>
+      <!-- Chỉ giữ Gemini -->
+      <input type="hidden" name="ai" id="ai" value="gemini" />
 
       <button type="submit"
               class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-200 w-full">
@@ -47,7 +42,7 @@
     </form>
 
     <div id="result" class="mt-6 p-4 bg-gray-50 border rounded-lg hidden">
-      <h2 id="answerSource" class="text-lg font-semibold mb-2 text-indigo-500">🧠 Trả lời từ:</h2>
+      <h2 id="answerSource" class="text-lg font-semibold mb-2 text-indigo-500">🧠 Trả lời từ VNES AI:</h2>
       <img id="answerImage" class="max-w-full rounded-lg mb-3 hidden" alt="Ảnh trả lời" />
       <p id="answerText" class="whitespace-pre-line text-gray-700"></p>
     </div>
@@ -69,11 +64,8 @@
       resultBox.classList.remove("hidden");
 
       const formData = new FormData(form);
-      const selectedAI = document.getElementById('ai').value;
 
-      // ✅ Cập nhật tiêu đề theo AI được chọn
-      const aiLabel = selectedAI === 'openai' ? 'Chat GPT' : 'VNES AI';
-      answerSource.textContent = `🧠 Trả lời từ ${aiLabel}:`;
+      answerSource.textContent = "🧠 Trả lời từ VNES AI:";
 
       try {
         const res = await fetch('/ask-image', {
@@ -95,11 +87,6 @@
 
           if (res.ok) {
             answerText.textContent = data.answer || "✅ Đã nhận được phản hồi.";
-
-            // ✅ Đảm bảo hiển thị đúng tên AI từ backend nếu có
-            const sourceName = data.ai === 'openai' ? 'Chat GPT' : 'VNES AI';
-            answerSource.textContent = `🧠 Trả lời từ ${sourceName}:`;
-
             form.reset();
           } else {
             answerText.textContent = `❌ Lỗi: ${data.error || "Không rõ nguyên nhân."}`;
