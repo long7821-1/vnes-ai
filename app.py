@@ -22,8 +22,12 @@ deepseek_client = OpenAI(
 )
 
 # Cấu hình OpenRouter API
+openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+if not openrouter_api_key:
+    raise ValueError("OPENROUTER_API_KEY không được thiết lập trong .env. Vui lòng thêm key từ https://openrouter.ai/")
+print("🔑 OpenRouter API Key detected and loaded successfully.")
 openrouter_client = OpenAI(
-    api_key=os.getenv("OPENROUTER_API_KEY"),
+    api_key=openrouter_api_key,
     base_url="https://openrouter.ai/api/v1"
 )
 
@@ -101,20 +105,33 @@ def ask_deepseek(question, image):
         print("❌ DeepSeek error:", e)
         return {"error": str(e), "ai": "deepseek"}
 
-# Gửi tới OpenRouter API (với mô hình tương tự ChatGPT)
+# Gửi tới OpenRouter API (với mô hình trả phí ChatGPT, hỗ trợ hình ảnh)
 def ask_openrouter(question, image):
     try:
-        if image:
-            return {"error": "OpenRouter API hiện không hỗ trợ hình ảnh với mô hình miễn phí.", "ai": "openrouter"}
+        # Sử dụng mô hình trả phí (ChatGPT, hỗ trợ hình ảnh)
+        model = "openai/gpt-4o"  # Mô hình trả phí, hỗ trợ hình ảnh, yêu cầu tài khoản OpenRouter có số dư
+        # Nếu không muốn hỗ trợ hình ảnh, có thể dùng "openai/gpt-3.5-turbo"
+        # Nếu muốn thử mô hình miễn phí, thay bằng: "meta-llama/llama-3.1-8b-instruct:free"
 
-        # Sử dụng mô hình miễn phí hoặc mô hình OpenAI nếu bạn có quyền truy cập
-        model = "meta-llama/llama-3.1-8b-instruct:free"  # Mô hình miễn phí
-        # Nếu bạn có quyền truy cập vào mô hình OpenAI qua OpenRouter, có thể thay bằng:
-        # model = "openai/gpt-3.5-turbo"
+        messages = [{"role": "user", "content": question}]
+
+        if image:
+            # Mã hóa hình ảnh thành base64
+            image = Image.open(image).convert("RGB")
+            buffered = io.BytesIO()
+            image.save(buffered, format="PNG")
+            img_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
+            messages.append({
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": question},
+                    {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{img_base64}"}}
+                ]
+            })
 
         response = openrouter_client.chat.completions.create(
             model=model,
-            messages=[{"role": "user", "content": question}],
+            messages=messages if not image else messages[1:],  # Nếu có hình ảnh, chỉ gửi tin nhắn có hình
             max_tokens=1024
         )
         answer = response.choices[0].message.content
@@ -123,8 +140,13 @@ def ask_openrouter(question, image):
             return {"image": generate_math_image(answer), "ai": "openrouter"}
         return {"text": answer, "ai": "openrouter"}
     except Exception as e:
-        print("❌ OpenRouter error:", e)
-        return {"error": str(e), "ai": "openrouter"}
+        error_message = str(e)
+        if "402" in error_message:
+            error_message = "Tài khoản OpenRouter không đủ số dư để sử dụng mô hình trả phí. Vui lòng nạp thêm tiền tại https://openrouter.ai/credits."
+        elif "401" in error_message:
+            error_message = "Lỗi xác thực OpenRouter: Key không hợp lệ hoặc không được thiết lập. Vui lòng kiểm tra OPENROUTER_API_KEY trong .env."
+        print("❌ OpenRouter error:", error_message)
+        return {"error": error_message, "ai": "openrouter"}
 
 # Giao diện
 @app.route('/')
