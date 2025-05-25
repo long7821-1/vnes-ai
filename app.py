@@ -12,13 +12,19 @@ import google.generativeai as genai
 # Load biến môi trường
 load_dotenv()
 
-# Cấu hình VNES AI API (sử dụng Gemini API backend)
+# Cấu hình VNES AI API (sử dụng Gemini backend)
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 # Cấu hình DeepSeek API
 deepseek_client = OpenAI(
     api_key=os.getenv("DEEPSEEK_API_KEY"),
     base_url="https://api.deepseek.com"
+)
+
+# Cấu hình OpenRouter API
+openrouter_client = OpenAI(
+    api_key=os.getenv("OPENROUTER_API_KEY"),
+    base_url="https://openrouter.ai/api/v1"
 )
 
 app = Flask(__name__)
@@ -47,7 +53,7 @@ def generate_math_image(text):
 # Gửi tới VNES AI (sử dụng Gemini backend)
 def ask_vnes_ai(question, image):
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")  # Sử dụng mô hình Gemini làm backend
+        model = genai.GenerativeModel("gemini-1.5-flash")
         if image:
             image = Image.open(image).convert("RGB")
             response = model.generate_content([question, image])
@@ -82,7 +88,7 @@ def ask_deepseek(question, image):
             return {"error": "DeepSeek API hiện không hỗ trợ hình ảnh.", "ai": "deepseek"}
 
         response = deepseek_client.chat.completions.create(
-            model="deepseek-chat",  # Hoặc "deepseek-reasoner"
+            model="deepseek-chat",
             messages=[{"role": "user", "content": question}],
             max_tokens=1024
         )
@@ -94,6 +100,31 @@ def ask_deepseek(question, image):
     except Exception as e:
         print("❌ DeepSeek error:", e)
         return {"error": str(e), "ai": "deepseek"}
+
+# Gửi tới OpenRouter API (với mô hình tương tự ChatGPT)
+def ask_openrouter(question, image):
+    try:
+        if image:
+            return {"error": "OpenRouter API hiện không hỗ trợ hình ảnh với mô hình miễn phí.", "ai": "openrouter"}
+
+        # Sử dụng mô hình miễn phí hoặc mô hình OpenAI nếu bạn có quyền truy cập
+        model = "meta-llama/llama-3.1-8b-instruct:free"  # Mô hình miễn phí
+        # Nếu bạn có quyền truy cập vào mô hình OpenAI qua OpenRouter, có thể thay bằng:
+        # model = "openai/gpt-3.5-turbo"
+
+        response = openrouter_client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": question}],
+            max_tokens=1024
+        )
+        answer = response.choices[0].message.content
+
+        if is_math_question(question):
+            return {"image": generate_math_image(answer), "ai": "openrouter"}
+        return {"text": answer, "ai": "openrouter"}
+    except Exception as e:
+        print("❌ OpenRouter error:", e)
+        return {"error": str(e), "ai": "openrouter"}
 
 # Giao diện
 @app.route('/')
@@ -112,6 +143,8 @@ def ask_with_image():
 
     if ai_model == "deepseek":
         result = ask_deepseek(question, image)
+    elif ai_model == "openrouter":
+        result = ask_openrouter(question, image)
     else:
         result = ask_vnes_ai(question, image)
 
@@ -125,6 +158,8 @@ def ask_with_image():
 if __name__ == '__main__':
     gemini_key = os.getenv("GEMINI_API_KEY")
     deepseek_key = os.getenv("DEEPSEEK_API_KEY")
+    openrouter_key = os.getenv("OPENROUTER_API_KEY")
     print("🔧 GEMINI_API_KEY (dùng cho VNES AI):", (gemini_key[:10] + "...") if gemini_key else "Chưa đặt")
     print("🔧 DEEPSEEK_API_KEY:", (deepseek_key[:10] + "...") if deepseek_key else "Chưa đặt")
+    print("🔧 OPENROUTER_API_KEY:", (openrouter_key[:10] + "...") if openrouter_key else "Chưa đặt")
     app.run(host='0.0.0.0', port=5000, debug=True)
