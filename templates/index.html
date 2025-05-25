@@ -16,7 +16,7 @@
       <h1 class="text-3xl font-bold text-indigo-700">VNES AI</h1>
     </div>
 
-    <h2 class="text-xl font-semibold text-center text-gray-600 mb-6">🎯 Hỏi VNES AI bằng hình ảnh</h2>
+    <h2 class="text-xl font-semibold text-center text-gray-600 mb-6">🎯 Hỏi VNES AI bằng hình ảnh (tùy chọn)</h2>
 
     <form id="askForm" enctype="multipart/form-data" class="space-y-4">
       <div>
@@ -27,9 +27,17 @@
       </div>
 
       <div>
-        <label for="image" class="block font-semibold mb-1">Tải hình ảnh lên:</label>
-        <input type="file" name="image" id="image" accept="image/*" required
+        <label for="image" class="block font-semibold mb-1">Tải hình ảnh lên (không bắt buộc):</label>
+        <input type="file" name="image" id="image" accept="image/*"
                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none file:bg-indigo-500 file:text-white file:font-semibold file:px-4 file:py-2 file:rounded file:mr-4" />
+      </div>
+
+      <div>
+        <label for="ai" class="block font-semibold mb-1">Chọn AI:</label>
+        <select name="ai" id="ai" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <option value="openai">Chat GPT</option>
+          <option value="gemini">VNES AI</option>
+        </select>
       </div>
 
       <button type="submit"
@@ -39,8 +47,8 @@
     </form>
 
     <div id="result" class="mt-6 p-4 bg-gray-50 border rounded-lg hidden">
-      <h2 class="text-lg font-semibold mb-2 text-indigo-500">🧠 Trả lời từ VNES AI:</h2>
-      <img id="answerImage" class="max-w-full rounded-lg mb-3 hidden" />
+      <h2 id="answerSource" class="text-lg font-semibold mb-2 text-indigo-500">🧠 Trả lời từ:</h2>
+      <img id="answerImage" class="max-w-full rounded-lg mb-3 hidden" alt="Ảnh trả lời" />
       <p id="answerText" class="whitespace-pre-line text-gray-700"></p>
     </div>
   </div>
@@ -50,14 +58,22 @@
     const answerText = document.getElementById('answerText');
     const answerImage = document.getElementById('answerImage');
     const resultBox = document.getElementById('result');
+    const answerSource = document.getElementById('answerSource');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      // Hiện trạng thái loading
       answerText.textContent = "⏳ Đang gửi câu hỏi...";
       answerImage.classList.add("hidden");
       resultBox.classList.remove("hidden");
 
       const formData = new FormData(form);
+      const selectedAI = document.getElementById('ai').value;
+
+      // ✅ Cập nhật tiêu đề theo AI được chọn
+      const aiLabel = selectedAI === 'openai' ? 'Chat GPT' : 'VNES AI';
+      answerSource.textContent = `🧠 Trả lời từ ${aiLabel}:`;
 
       try {
         const res = await fetch('/ask-image', {
@@ -73,14 +89,29 @@
           answerImage.src = url;
           answerImage.classList.remove("hidden");
           answerText.textContent = "";
-        } else {
+        } else if (contentType && contentType.includes("application/json")) {
           const data = await res.json();
           answerImage.classList.add("hidden");
-          answerText.textContent = data.answer || `❌ ${data.error}`;
+
+          if (res.ok) {
+            answerText.textContent = data.answer || "✅ Đã nhận được phản hồi.";
+
+            // ✅ Đảm bảo hiển thị đúng tên AI từ backend nếu có
+            const sourceName = data.ai === 'openai' ? 'Chat GPT' : 'VNES AI';
+            answerSource.textContent = `🧠 Trả lời từ ${sourceName}:`;
+
+            form.reset();
+          } else {
+            answerText.textContent = `❌ Lỗi: ${data.error || "Không rõ nguyên nhân."}`;
+          }
+        } else {
+          answerText.textContent = "❌ Đã nhận phản hồi không đúng định dạng.";
+          answerImage.classList.add("hidden");
         }
 
       } catch (err) {
-        answerText.textContent = "❌ Đã xảy ra lỗi khi gửi yêu cầu.";
+        answerText.textContent = `❌ Đã xảy ra lỗi: ${err.message || "Kết nối thất bại."}`;
+        answerImage.classList.add("hidden");
       }
     });
   </script>
