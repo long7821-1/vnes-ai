@@ -1,8 +1,0 @@
-flask
-python-dotenv
-flask-cors
-Pillow
-google-generativeai
-gunicorn
-matplotlib
-OpenAI
