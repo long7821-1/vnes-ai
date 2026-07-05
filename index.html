@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VPEDU - Khóa ĐGNL 2K9 VACT
+  </title>
+  <meta name="description" content="Chính thức khai giảng khóa ĐGNL VACT 2K9 tại VPEDU. Lộ trình hơn 200 buổi, học từ số 0, tặng khóa luyện đề và Secret Box cho học viên đăng ký sớm."/>
+  <meta property="og:title" content="VPEDU - Khóa ĐGNL 2K9 Xuất Phát Sớm"/>
+  <meta property="og:description" content="Lộ trình bài bản hơn 200 buổi, học từ số 0, luyện đề chiến thuật, thi thử mô phỏng thật và ưu đãi Secret Box cho 100 học viên đầu tiên."/>
+  <meta property="og:image" content="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/chatgpt-image-23-41-06-25-thg-5-2026.png"/>
+  <meta property="og:type" content="website"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+* {
+  box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+  }
+  *{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+  }
+  :root{
+    --blue:#063f8f;
+    --blue-2:#0b63ce;
+    --blue-3:#e7f5ff;
+    --orange:#ff6b12;
+    --orange-2:#ea580c;
+    --yellow:#ffd166;
+    --text:#0f172a;
+    --muted:#64748b;
+    --line:#e2e8f0;
+    --white:#ffffff;
+    --shadow:0 24px 70px rgba(15, 23, 42, 0.14);
+    --soft-shadow:0 14px 36px rgba(15, 23, 42, 0.08);
+    --radius:28px;
+  }
+  html{
+    scroll-behavior:smooth;
+  }
+  img{
+    display:block;
+    max-width:100%;
+  }
+  a{
+    text-decoration:none;
+    color:inherit;
+  }
+  .container{
+    width:min(1180px, calc(100% - 32px));
+    margin:0 auto;
+  }
+  .brand img{
+    width:58px;
+    height:58px;
+    object-fit:contain;
+    border-radius:16px;
+    background:#fff;
+  }
+  .brand strong{
+    display:block;
+    font-size:24px;
+    line-height:1;
+    font-weight:900;
+    color:var(--blue);
+  }
+  .brand strong span{
+    color:var(--orange);
+  }
+  .brand small{
+    display:block;
+    margin-top:5px;
+    font-size:11px;
+    font-weight:800;
+    color:var(--muted);
+  }
+  .nav a{
+    padding:10px 12px;
+    border-radius:999px;
+    transition:0.25s ease;
+  }
+  .nav a:hover{
+    background:var(--blue-3);
+    color:var(--blue);
+  }
+  .btn-primary{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:999px;
+    color:#fff;
+    background:linear-gradient(135deg, var(--orange), var(--orange-2));
+    font-weight:900;
+    box-shadow:0 16px 34px rgba(234, 88, 12, 0.28);
+    transition:0.25s ease;
+    text-align:center;
+    min-height:58px;
+    padding:0 26px;
+    font-size:15px;
+    cursor:pointer;
+  }
+  .btn-secondary{
+    min-height:58px;
+    padding:0 26px;
+    font-size:15px;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:999px;
+    color:var(--blue);
+    background:#fff;
+    border:1px solid var(--line);
+    font-weight:900;
+    box-shadow:var(--soft-shadow);
+    transition:0.25s ease;
+    text-align:center;
+  }
+  .btn-primary:hover{
+    transform:translateY(-3px);
+  }
+  .btn-secondary:hover{
+    transform:translateY(-3px);
+  }
+  .hero{
+    position:relative;
+    padding:72px 0 64px;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:42px;
+    align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 16px;
+    margin-bottom:18px;
+    border-radius:999px;
+    background:#ffffff;
+    color:var(--blue);
+    font-size:14px;
+    font-weight:900;
+    box-shadow:var(--soft-shadow);
+  }
+  .hero h1{
+    font-size:clamp(36px, 5.4vw, 66px);
+    line-height:1.08;
+    letter-spacing:-1.8px;
+    font-weight:900;
+    color:#061a3a;
+    margin-bottom:22px;
+  }
+  .hero h1 span{
+    color:var(--orange);
+  }
+  .hero-desc{
+    max-width:720px;
+    font-size:18px;
+    color:var(--muted);
+    margin-bottom:26px;
+  }
+  .hero-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-bottom:26px;
+  }
+  .hero-badges{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:12px;
+    max-width:760px;
+  }
+  .hero-badges div{
+    padding:14px 16px;
+    border-radius:18px;
+    background:rgba(255, 255, 255, 0.9);
+    border:1px solid rgba(226, 232, 240, 0.9);
+    box-shadow:var(--soft-shadow);
+    color:#1e3a5f;
+    font-size:14px;
+    font-weight:800;
+  }
+  .hero-card{
+    position:relative;
+    background:#ffffff;
+    border-radius:36px;
+    padding:14px;
+    box-shadow:var(--shadow);
+    border:1px solid rgba(226, 232, 240, 0.9);
+    overflow:hidden;
+  }
+  .hero-card::before{
+    content:"";
+    position:absolute;
+    inset:-60px auto auto -60px;
+    width:180px;
+    height:180px;
+    border-radius:999px;
+    background:rgba(255, 107, 18, 0.16);
+  }
+  .hero-card img{
+    position:relative;
+    width:100%;
+    aspect-ratio:16 / 10;
+    object-fit:cover;
+    border-radius:28px;
+    background:linear-gradient(135deg, #dff6ff, #fff3e8);
+  }
+  .hero-info{
+    position:relative;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:12px;
+    margin-top:14px;
+  }
+  .hero-info div{
+    padding:16px 12px;
+    border-radius:18px;
+    background:#f8fbff;
+    text-align:center;
+    border:1px solid #e2e8f0;
+  }
+  .hero-info strong{
+    display:block;
+    color:var(--orange);
+    font-size:28px;
+    font-weight:900;
+    line-height:1;
+    margin-bottom:8px;
+  }
+  .hero-info span{
+    color:var(--blue);
+    font-size:13px;
+    font-weight:900;
+  }
+  .section{
+    padding:68px 0;
+  }
+  .section-head{
+    max-width:900px;
+    margin:0 auto 40px;
+    text-align:center;
+  }
+  .section-label{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 16px;
+    border-radius:999px;
+    background:#ffffff;
+    color:var(--blue);
+    font-size:14px;
+    font-weight:900;
+    box-shadow:var(--soft-shadow);
+    margin-bottom:16px;
+  }
+  .section-head h2{
+    font-size:clamp(30px, 4vw, 48px);
+    line-height:1.18;
+    letter-spacing:-1px;
+    color:var(--blue);
+    font-weight:900;
+    margin-bottom:14px;
+  }
+  .section-head p{
+    color:var(--muted);
+    font-size:17px;
+  }
+  .grid-3{
+    display:grid;
+    gap:18px;
+    grid-template-columns:repeat(3, 1fr);
+  }
+  .grid-4{
+    display:grid;
+    gap:18px;
+    grid-template-columns:repeat(4, 1fr);
+  }
+  .card{
+    background:#ffffff;
+    border:1px solid rgba(226, 232, 240, 0.92);
+    border-radius:26px;
+    padding:24px;
+    box-shadow:var(--soft-shadow);
+    transition:0.25s ease;
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    box-shadow:var(--shadow);
+  }
+  .card-icon{
+    width:58px;
+    height:58px;
+    border-radius:18px;
+    display:grid;
+    place-items:center;
+    background:var(--blue-3);
+    font-size:28px;
+    margin-bottom:16px;
+  }
+  .card h3{
+    color:#0f172a;
+    font-size:18px;
+    line-height:1.4;
+    font-weight:900;
+    margin-bottom:8px;
+  }
+  .card p{
+    color:var(--muted);
+    font-size:14px;
+    font-weight:600;
+  }
+  .offer{
+    border-radius:36px;
+    padding:44px;
+    color:#ffffff;
+    background:radial-gradient(circle at top left, rgba(255, 255, 255, 0.25), transparent 30%),
+      linear-gradient(135deg, var(--blue-2), var(--blue));
+    box-shadow:0 28px 70px rgba(3, 105, 161, 0.28);
+  }
+  .offer-grid{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:30px;
+    align-items:start;
+  }
+  .offer h2{
+    font-size:clamp(30px, 4vw, 46px);
+    line-height:1.18;
+    font-weight:900;
+    margin-bottom:14px;
+  }
+  .offer p{
+    opacity:0.95;
+    font-size:16px;
+  }
+  .gift-list{
+    list-style:none;
+    display:grid;
+    gap:12px;
+  }
+  .gift-list li{
+    padding:14px 16px;
+    border-radius:18px;
+    background:rgba(255, 255, 255, 0.14);
+    border:1px solid rgba(255, 255, 255, 0.28);
+    font-weight:800;
+  }
+  .roadmap{
+    background:#ffffff;
+    border-radius:36px;
+    padding:24px;
+    box-shadow:var(--shadow);
+    border:1px solid rgba(226, 232, 240, 0.92);
+  }
+  .phase-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:18px;
+  }
+  .phase{
+    position:relative;
+    border-radius:28px;
+    padding:24px;
+    overflow:hidden;
+    border:1px solid #e2e8f0;
+    background:linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  }
+  .phase::after{
+    content:"";
+    position:absolute;
+    top:-40px;
+    right:-40px;
+    width:120px;
+    height:120px;
+    border-radius:999px;
+    background:rgba(255, 107, 18, 0.13);
+  }
+  .phase-num{
+    position:relative;
+    width:62px;
+    height:62px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    color:#ffffff;
+    background:linear-gradient(135deg, var(--blue-2), var(--blue));
+    font-size:26px;
+    font-weight:900;
+    margin-bottom:16px;
+  }
+  .phase:nth-child(2) .phase-num{
+    background:linear-gradient(135deg, #16a34a, #15803d);
+  }
+  .phase:nth-child(3) .phase-num{
+    background:linear-gradient(135deg, var(--orange), var(--orange-2));
+  }
+  .phase:nth-child(4) .phase-num{
+    background:linear-gradient(135deg, #7c3aed, #4c1d95);
+  }
+  .phase h3{
+    position:relative;
+    color:var(--blue);
+    font-size:21px;
+    line-height:1.25;
+    font-weight:900;
+    margin-bottom:12px;
+  }
+  .phase ul{
+    position:relative;
+    padding-left:18px;
+    color:var(--muted);
+    font-size:14px;
+    font-weight:600;
+  }
+  .phase li{
+    margin-bottom:8px;
+  }
+  .teacher{
+    background:radial-gradient(circle at top right, rgba(255, 107, 18, 0.12), transparent 32%),
+      linear-gradient(135deg, #ffffff, #eaf7ff);
+  }
+  .teacher-wrap{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:34px;
+    align-items:center;
+    background:#ffffff;
+    border-radius:36px;
+    padding:18px;
+    border:1px solid rgba(226, 232, 240, 0.92);
+    box-shadow:var(--shadow);
+  }
+  .teacher-wrap img{
+    width:100%;
+    aspect-ratio:16 / 11;
+    object-fit:cover;
+    border-radius:28px;
+    background:#f1f8ff;
+  }
+  .teacher-content{
+    padding:22px;
+  }
+  .teacher-content h2{
+    color:var(--blue);
+    font-size:clamp(32px, 4vw, 50px);
+    line-height:1.14;
+    font-weight:900;
+    letter-spacing:-1px;
+    margin-bottom:14px;
+  }
+  .teacher-content h2 span{
+    color:var(--orange);
+  }
+  .teacher-content p{
+    color:var(--muted);
+    font-size:17px;
+    margin-bottom:22px;
+  }
+  .check-list{
+    display:grid;
+    gap:12px;
+  }
+  .check-list div{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    padding:14px 16px;
+    border-radius:18px;
+    background:#f8fbff;
+    border:1px solid #e2e8f0;
+    color:#1e3a5f;
+    font-size:14px;
+    font-weight:800;
+  }
+  .check-list b{
+    width:30px;
+    height:30px;
+    flex-shrink:0;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    background:var(--orange);
+  }
+  .teacher-grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:20px;
+  }
+  .teacher-card{
+    background:#ffffff;
+    border-radius:26px;
+    overflow:hidden;
+    border:1px solid rgba(226, 232, 240, 0.92);
+    box-shadow:0 14px 34px rgba(15, 23, 42, 0.08);
+    transition:0.25s ease;
+  }
+  .teacher-card:hover{
+    transform:translateY(-6px);
+    box-shadow:var(--shadow);
+  }
+  .teacher-card img{
+    width:100%;
+    aspect-ratio:4 / 5;
+    object-fit:cover;
+    background:linear-gradient(135deg, #e0f7ff, #fff3e8);
+  }
+  .teacher-info{
+    padding:18px;
+  }
+  .teacher-info span{
+    display:inline-flex;
+    padding:7px 12px;
+    border-radius:999px;
+    background:#e0f7ff;
+    color:#0369a1;
+    font-size:12px;
+    font-weight:900;
+    margin-bottom:10px;
+  }
+  .teacher-info h3{
+    font-size:18px;
+    line-height:1.35;
+    font-weight:900;
+    color:#0f172a;
+    margin-bottom:8px;
+  }
+  .teacher-info p{
+    color:#64748b;
+    font-size:13px;
+    line-height:1.65;
+    font-weight:600;
+  }
+  .final-grid{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:28px;
+    align-items:start;
+  }
+  .form-card{
+    background:linear-gradient(180deg, #24b4e5 0%, #0b87c5 100%);
+    color:#ffffff;
+    border-radius:34px;
+    padding:32px;
+    box-shadow:0 24px 60px rgba(3, 105, 161, 0.28);
+  }
+  .form-card h2{
+    text-align:center;
+    font-size:28px;
+    line-height:1.35;
+    font-weight:900;
+    margin-bottom:22px;
+  }
+  .form-card input, .form-card select{
+    width:100%;
+    height:54px;
+    padding:0 16px;
+    margin-bottom:13px;
+    border:none;
+    outline:none;
+    border-radius:16px;
+    background:rgba(255, 255, 255, 0.96);
+    color:#0f172a;
+    font-family:"Be Vietnam Pro", Arial, sans-serif;
+    font-size:15px;
+  }
+  .form-card button{
+    width:100%;
+    height:58px;
+    border:none;
+    border-radius:16px;
+    background:linear-gradient(135deg, var(--orange), var(--orange-2));
+    color:#ffffff;
+    font-family:"Be Vietnam Pro", Arial, sans-serif;
+    font-size:16px;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:0 16px 34px rgba(234, 88, 12, 0.3);
+  }
+  .direct-link{
+    display:block;
+    margin-top:14px;
+    text-align:center;
+    color:#ffffff;
+    font-weight:800;
+    text-decoration:underline;
+  }
+  .faq{
+    display:grid;
+    gap:16px;
+  }
+  .faq-item{
+    background:#ffffff;
+    border:1px solid rgba(226, 232, 240, 0.92);
+    border-radius:22px;
+    padding:22px;
+    box-shadow:var(--soft-shadow);
+  }
+  .faq-item h3{
+    color:var(--blue);
+    font-size:18px;
+    font-weight:900;
+    margin-bottom:8px;
+  }
+  .faq-item p{
+    color:var(--muted);
+    font-size:14px;
+    font-weight:600;
+  }
+  .floating-contact{
+    position:fixed;
+    right:18px;
+    bottom:22px;
+    z-index:9999;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .floating-contact a{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-height:52px;
+    padding:0 16px;
+    border-radius:999px;
+    color:#ffffff;
+    font-size:15px;
+    font-weight:900;
+    box-shadow:0 14px 34px rgba(15, 23, 42, 0.22);
+  }
+  .floating-zalo{
+    background:linear-gradient(135deg, #0ea5e9, #0068ff);
+  }
+  .floating-phone{
+    background:linear-gradient(135deg, var(--orange), var(--orange-2));
+  }
+  .floating-icon{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#ffffff;
+    display:grid;
+    place-items:center;
+    color:#0068ff;
+    font-size:18px;
+    font-weight:900;
+    flex-shrink:0;
+  }
+  .floating-phone .floating-icon{
+    color:var(--orange-2);
+  }
+  #ij6zob{
+    text-align:left;
+    margin:0 0 24px;
+  }
+  @media (max-width: 1100px){
+    .hero-grid{
+      grid-template-columns:1fr;
+    }
+    .teacher-wrap{
+      grid-template-columns:1fr;
+    }
+    .offer-grid{
+      grid-template-columns:1fr;
+    }
+    .final-grid{
+      grid-template-columns:1fr;
+    }
+    .grid-3{
+      grid-template-columns:repeat(2, 1fr);
+    }
+    .grid-4{
+      grid-template-columns:repeat(2, 1fr);
+    }
+    .phase-grid{
+      grid-template-columns:repeat(2, 1fr);
+    }
+    .teacher-grid{
+      grid-template-columns:repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 768px){
+    .container{
+      width:100%;
+      padding-left:18px;
+      padding-right:18px;
+    }
+    .brand img{
+      width:48px;
+      height:48px;
+    }
+    .brand strong{
+      font-size:20px;
+    }
+    .brand small{
+      display:none;
+    }
+    .hero{
+      padding:42px 0 48px;
+    }
+    .hero h1{
+      font-size:32px;
+    }
+    .hero-desc{
+      font-size:15.5px;
+    }
+    .hero-actions{
+      display:grid;
+      grid-template-columns:1fr;
+    }
+    .btn-primary{
+      width:100%;
+      min-height:52px;
+      font-size:14px;
+      padding:0 16px;
+    }
+    .btn-secondary{
+      width:100%;
+      min-height:52px;
+      font-size:14px;
+      padding:0 16px;
+    }
+    .hero-badges{
+      grid-template-columns:1fr;
+    }
+    .hero-info{
+      grid-template-columns:1fr;
+    }
+    .grid-3{
+      grid-template-columns:1fr;
+    }
+    .grid-4{
+      grid-template-columns:1fr;
+    }
+    .phase-grid{
+      grid-template-columns:1fr;
+    }
+    .section{
+      padding:48px 0;
+    }
+    .section-head{
+      margin-bottom:28px;
+    }
+    .section-head h2, .teacher-content h2{
+      font-size:28px;
+    }
+    .roadmap{
+      border-radius:28px;
+      padding:24px 20px;
+    }
+    .offer{
+      border-radius:28px;
+      padding:24px 20px;
+    }
+    .form-card{
+      border-radius:28px;
+      padding:24px 20px;
+    }
+    .teacher-content{
+      padding:10px;
+    }
+    .teacher-grid{
+      grid-template-columns:repeat(2, 1fr);
+      gap:14px;
+    }
+    .teacher-info{
+      padding:14px;
+    }
+    .teacher-info h3{
+      font-size:15px;
+    }
+    .teacher-info p{
+      font-size:12px;
+    }
+    .floating-contact{
+      right:12px;
+      bottom:12px;
+      gap:9px;
+    }
+    .floating-contact a{
+      min-height:46px;
+      padding:0 12px;
+      font-size:12px;
+    }
+    .floating-icon{
+      width:30px;
+      height:30px;
+      font-size:15px;
+    }
+  }
+  @media (max-width: 480px){
+    .teacher-grid{
+      grid-template-columns:1fr;
+    }
+  }
+
+.vpedu-site-header{
+  position:sticky;
+  top:0;
+  z-index:9998;
+  background:rgba(255, 255, 255, 0.92);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(226, 232, 240, 0.82);
+  box-shadow:0 12px 30px rgba(15, 23, 42, 0.06);
+}
+.vpedu-site-header-inner{
+  min-height:86px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:22px;
+}
+.vpedu-header-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
+}
+.vpedu-header-nav{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  font-size:14px;
+  font-weight:900;
+  color:#334155;
+}
+.vpedu-header-cta{
+  min-height:46px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 20px;
+  border-radius:999px;
+  color:#ffffff;
+  background:linear-gradient(135deg, var(--orange), var(--orange-2));
+  font-size:14px;
+  font-weight:900;
+  box-shadow:0 14px 28px rgba(234, 88, 12, 0.24);
+  white-space:nowrap;
+  transition:0.25s ease;
+}
+.vpedu-header-cta:hover{transform:translateY(-2px);}
+@media (max-width: 980px){
+  .vpedu-site-header-inner{min-height:76px;}
+  .vpedu-header-nav{display:none;}
+}
+@media (max-width: 520px){
+  .vpedu-header-cta{display:none;}
+  .vpedu-site-header-inner{justify-content:center;}
+}
+
+
+.vpedu-footer-wrap{background-color:#51b8e8;color:#ffffff;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;padding:50px 20px;line-height:1.6;display:block;width:100%;box-sizing:border-box;}
+.vpedu-footer-wrap *{box-sizing:border-box;margin:0;padding:0;}
+.vpedu-footer-container{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:40px;}
+.vpedu-footer-col{flex:1;min-width:250px;}
+.vpedu-footer-col-info{flex:1.5;}
+.vpedu-footer-main-logo{width:150px;height:auto;border-radius:100px;margin-bottom:25px;display:block;}
+.vpedu-footer-heading{font-size:20px;font-weight:800;text-transform:uppercase;margin-bottom:25px;letter-spacing:0.5px;}
+.vpedu-footer-contact-list{display:flex;flex-direction:column;gap:18px;}
+.vpedu-footer-contact-item{display:flex;align-items:flex-start;gap:12px;}
+.vpedu-footer-icon-wrapper{width:20px;height:20px;flex-shrink:0;margin-top:3px;}
+.vpedu-footer-icon-wrapper svg{width:100%;height:100%;display:block;}
+.vpedu-footer-text{font-size:15px;line-height:1.5;}
+.vpedu-footer-list{list-style:none;display:flex;flex-direction:column;gap:12px;}
+.vpedu-footer-link{color:#ffffff;text-decoration:none;font-size:15px;transition:all 0.3s ease;display:inline-block;}
+.vpedu-footer-link:hover{padding-left:8px;opacity:0.9;}
+.vpedu-footer-socials{display:flex;gap:12px;margin-top:25px;flex-wrap:wrap;}
+.vpedu-footer-social-box{position:relative;width:40px;height:40px;background-color:#ffffff;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.1);}
+.vpedu-footer-social-overlay{position:absolute;top:100%;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.08);transition:top 0.3s cubic-bezier(0.4,0,0.2,1);z-index:1;}
+.vpedu-footer-social-box:hover .vpedu-footer-social-overlay{top:0;}
+.vpedu-footer-social-link{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;z-index:2;text-decoration:none;}
+.vpedu-footer-social-link svg,.vpedu-footer-social-img{width:22px;height:22px;object-fit:contain;transition:transform 0.3s ease;}
+.vpedu-footer-social-box:hover svg,.vpedu-footer-social-box:hover .vpedu-footer-social-img{transform:scale(1.15);}
+@media (max-width: 768px){
+  .vpedu-footer-wrap{padding:40px 15px;}
+  .vpedu-footer-container{flex-direction:column;gap:35px;}
+  .vpedu-footer-col{min-width:100%;}
+  .vpedu-footer-heading{margin-bottom:15px;}
+  .vpedu-footer-main-logo{width:120px;}
+}
+
+  </style>
+</head>
+<body>
+  <header class="vpedu-site-header">
+  <div class="container vpedu-site-header-inner">
+    <a href="#it8xq" class="brand vpedu-header-brand" aria-label="VPEDU trang chủ">
+      <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/z7942557994092-6877a74b58fe299abf02838fba04bb99-1.jpg" alt="Logo VPEDU"/>
+      <span>
+        <strong>VP<span>EDU</span></strong>
+      </span>
+    </a>
+    <nav class="nav vpedu-header-nav" aria-label="Điều hướng chính">
+      <a href="#uu-dai">Ưu đãi</a>
+      <a href="#ly-do">Vì sao học sớm</a>
+      <a href="#lo-trinh">Lộ trình</a>
+      <a href="#doi-ngu-giao-vien">Giáo viên</a>
+      <a href="#dang-ky">Đăng ký</a>
+    </nav>
+    <a href="#dang-ky" class="vpedu-header-cta">Tư vấn miễn phí</a>
+  </div>
+</header>
+  <section id="it8xq" class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">🚀 Chính thức khai giảng khóa ĐGNL 2K9
+        </div>
+        <h1>
+          Xuất Phát Sớm Cùng VPEDU 
+          <br/>
+          <span>Chinh Phục Trường TOP</span>
+        </h1>
+        <p class="hero-desc">
+          Khóa luyện thi ĐGNL 
+          <strong>VACT</strong> dành cho học sinh 2K9.
+          Lộ trình bài bản, học từ số 0, xây nền vững chắc và bứt phá sớm để chinh phục
+          tấm vé vào các trường đại học TOP.
+        </p>
+        <div class="hero-actions">
+          <a href="#dang-ky" class="btn-primary">Đăng Ký Giữ Chỗ Ngay</a>
+          <a href="#uu-dai" class="btn-secondary">Nhận Secret Box VPEDU</a>
+        </div>
+        <div class="hero-badges">
+          <div>✅ Hơn 200 buổi đào tạo, tặng thêm khóa luyện đề
+          </div>
+          <div>✅ Học từ số 0, phù hợp học sinh cần xây nền
+          </div>
+          <div>✅ Học Online qua Zoom, tương tác trực tiếp
+          </div>
+          <div>✅ Record đầy đủ trên nền tảng Web VPEDU
+          </div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/chatgpt-image-22-29-47-27-thg-5-2026.png" alt="Khóa ĐGNL 2K9 VPEDU" id="igntk"/>
+        <div class="hero-info">
+          <div>
+            <strong>200+</strong>
+            <span>Buổi học</span>
+          </div>
+          <div>
+            <strong>100</strong>
+            <span>Slot ưu đãi</span>
+          </div>
+          <div>
+            <strong>24/7</strong>
+            <span>Support</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="uu-dai" class="section">
+    <div class="container">
+      <div class="offer">
+        <div class="offer-grid">
+          <div>
+            <h2>Ưu đãi đặc biệt chỉ dành cho 100 chiến binh đầu tiên
+            </h2>
+            <p>
+              VPEDU chơi lớn với gói quà tặng cực khủng để tiếp sức cho sĩ tử 2K9
+              xuất phát sớm và giữ lợi thế ngay từ đầu.
+            </p>
+          </div>
+          <ul class="gift-list">
+            <li>🎟️ Voucher học phí: giảm trực tiếp đến 1.010.000đ.
+            </li>
+            <li>🎁 Secret Box VPEDU tổng giá trị quà tặng lên đến 10.000.000đ.
+            </li>
+            <li>📟 Cơ hội nhận máy tính Casio FX-580VN X-BU trị giá 816.000đ.
+            </li>
+            <li>📒 Sổ tay Notebook “Chinh phục ĐGNL” độc quyền từ VPEDU.
+            </li>
+            <li>🧸 Gấu bông logo VPEDU Limited dành riêng cho học viên hệ thống.
+            </li>
+            <li>📚 Tặng bộ 4 cuốn “Bí kíp ôn luyện ĐGNL” chuẩn cấu trúc mới nhất.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="ly-do" class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">Vì sao cần học sớm?</span>
+        <h2>2K9 không nên đợi đến lớp 12 mới bắt đầu ôn ĐGNL
+        </h2>
+        <p>
+          ĐGNL là kỳ thi yêu cầu tư duy sâu, kiến thức rộng và khả năng xử lý nhanh.
+          Học sớm giúp học sinh có đủ thời gian xây nền, luyện kỹ năng và tối ưu điểm số.
+        </p>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon">🔥
+          </div>
+          <h3>Độ khó ngày càng tăng
+          </h3>
+          <p>Đề ĐGNL yêu cầu tư duy, đọc hiểu và vận dụng kiến thức rộng, không thể học tủ phút chót.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🧘
+          </div>
+          <h3>Giảm áp lực lớp 12
+          </h3>
+          <p>Học sớm giúp xây nền vững, vào năm cuối chỉ cần luyện đề và tối ưu điểm số.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎓
+          </div>
+          <h3>Mở rộng cánh cửa đại học TOP
+          </h3>
+          <p>Nhiều trường đại học TOP ưu tiên xét tuyển kết quả ĐGNL, tạo thêm cơ hội trúng tuyển.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="lo-trinh" class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">Chiến lược đào tạo</span>
+        <h2>Khóa học XPS VPEDU 2026 - Hơn 200 buổi, tặng thêm khóa luyện đề
+        </h2>
+        <p>
+          Lộ trình được thiết kế “may đo” cho học sinh 2K9, giúp bứt phá từ con số 0
+          đến khi sẵn sàng bước vào phòng thi.
+        </p>
+      </div>
+      <div class="roadmap">
+        <div class="phase-grid">
+          <div class="phase">
+            <div class="phase-num">01
+            </div>
+            <h3>Xây nền vững
+            </h3>
+            <ul>
+              <li>Hệ thống kiến thức trọng tâm lớp 10, 11 và tiền đề lớp 12.
+              </li>
+              <li>Lấp đầy lỗ hổng căn bản cho học sinh mất gốc.
+              </li>
+              <li>Rèn kỹ năng đọc hiểu, phân tích dữ kiện và tư duy nền tảng.
+              </li>
+            </ul>
+          </div>
+          <div class="phase">
+            <div class="phase-num">02
+            </div>
+            <h3>Tổng ôn toàn diện
+            </h3>
+            <ul>
+              <li>Ôn luyện sâu các hợp phần tư duy theo cấu trúc đề mới.
+              </li>
+              <li>Rèn phương pháp giải nhanh và tư duy logic.
+              </li>
+              <li>Mini test định kỳ để đo tiến bộ sau từng chuyên đề.
+              </li>
+            </ul>
+          </div>
+          <div class="phase">
+            <div class="phase-num">03
+            </div>
+            <h3>Luyện đề chiến thuật
+            </h3>
+            <ul>
+              <li>Thực chiến với kho đề độc quyền của VPEDU.
+              </li>
+              <li>Rèn quản lý thời gian và chiến thuật làm bài.
+              </li>
+              <li>Tối ưu điểm số cho từng dạng bài khó.
+              </li>
+            </ul>
+          </div>
+          <div class="phase">
+            <div class="phase-num">04
+            </div>
+            <h3>Thi thử &amp; tổng duyệt
+            </h3>
+            <ul>
+              <li>Thi thử mô phỏng áp lực phòng thi thật.
+              </li>
+              <li>Phân tích phổ điểm, chỉ ra điểm yếu cần cải thiện.
+              </li>
+              <li>Được chuyên gia hướng dẫn sửa lỗi ngay tại chỗ.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="khac-biet" class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">Điểm khác biệt</span>
+        <h2>Điểm khác biệt chỉ có tại VPEDU
+        </h2>
+      </div>
+      <div class="grid-4">
+        <div class="card">
+          <div class="card-icon">👨‍🏫
+          </div>
+          <h3>Đội ngũ chuyên gia
+          </h3>
+          <p>Giảng viên là các thầy cô trường chuyên, có nhiều năm kinh nghiệm ôn thi ĐGNL.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🖥️
+          </div>
+          <h3>Thi thử chuẩn hóa
+          </h3>
+          <p>Giao diện mô phỏng kỳ thi thật, ngân hàng câu hỏi được cập nhật liên tục.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-icon">👥
+          </div>
+          <h3>Support 24/7
+          </h3>
+          <p>Đội ngũ trợ giảng là thủ khoa, á khoa đồng hành giải đáp thắc mắc 1:1.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📼
+          </div>
+          <h3>Học lại linh hoạt
+          </h3>
+          <p>100% buổi học được ghi hình chất lượng cao trên nền tảng Web VPEDU.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="giao-vien" class="section teacher">
+    <div class="container">
+      <div class="teacher-wrap">
+        <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/chatgpt-image-22-26-43-27-thg-5-2026.png" alt="Đội ngũ giáo viên VPEDU" id="i4zo01"/>
+        <div class="teacher-content">
+          <span class="section-label">Đội ngũ đồng hành</span>
+          <h2>Học cùng giáo viên giỏi 
+            <span>và trợ giảng sát sao</span>
+          </h2>
+          <p>
+            Học sinh được học trực tiếp qua Zoom, được giải đáp bài tập, được xem lại record
+            và được định hướng chiến lược học phù hợp với năng lực cá nhân.
+          </p>
+          <div class="check-list">
+            <div>
+              <b>✓
+              </b> Giáo viên giảng dạy trực tiếp, trọng tâm và dễ hiểu.
+            </div>
+            <div>
+              <b>✓
+              </b> Trợ giảng đồng hành giải đáp thắc mắc trong suốt khóa học.
+            </div>
+            <div>
+              <b>✓
+              </b> Học liệu và record được lưu trữ trên hệ thống Web VPEDU.
+            </div>
+            <div>
+              <b>✓
+              </b> Thi thử định kỳ, phân tích lỗi sai và tối ưu chiến thuật.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="doi-ngu-giao-vien" class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">Đội ngũ giáo viên VPEDU</span>
+        <h2>Học cùng đội ngũ giáo viên giàu kinh nghiệm luyện thi ĐGNL
+        </h2>
+        <p>
+          VPEDU quy tụ đội ngũ giáo viên nhiều kinh nghiệm, đồng hành cùng học sinh 2K9 trong các hợp phần
+          Toán, Văn, Anh, Lý, Hóa, Sinh, Sử, Địa, GDKT &amp; Pháp luật theo định hướng ĐGNL.
+        </p>
+      </div>
+      <div class="teacher-grid">
+        <div class="teacher-card">
+          <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/z7829302934035-6aaa802e3f2776d2c48eeb285369547a.jpg" alt="Thầy Lương Văn Huy"/>
+          <div class="teacher-info">
+            <span>Toán học</span>
+            <h3>Thầy Lương Văn Huy
+            </h3>
+            <p>Giáo viên Toán, đồng hành xây nền tư duy định lượng và chiến thuật xử lý bài ĐGNL.
+            </p>
+          </div>
+        </div>
+        <div class="teacher-card">
+          <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/z7829302964304-826f1750e3442144b0115071c8f194d5.jpg" alt="Thầy Nguyễn Chí Tâm"/>
+          <div class="teacher-info">
+            <span>Toán học</span>
+            <h3>Thầy Nguyễn Chí Tâm
+            </h3>
+            <p>Giáo viên Toán, hỗ trợ học sinh rèn tư duy giải bài và nâng tốc độ làm đề.
+            </p>
+          </div>
+        </div>
+        <div class="teacher-card">
+          <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/z7829302939477-5f323ebcc075a7b9a82ecd908040cc23.jpg" alt="Cô Đỗ Quỳnh Nga"/>
+          <div class="teacher-info">
+            <span>Ngữ văn</span>
+            <h3>Cô Đỗ Quỳnh Nga
+            </h3>
+            <p>Giáo viên Văn, hỗ trợ kỹ năng đọc hiểu, phân tích ngôn ngữ và tư duy định tính.
+            </p>
+          </div>
+        </div>
+        <div class="teacher-card">
+          <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/z7829302945790-f7706dc1ab367e3b64bb996adf0c95c2.jpg" alt="Cô Đặng Thị Kim Dung"/>
+          <div class="teacher-info">
+            <span>Tiếng Anh</span>
+            <h3>Cô Đặng Thị Kim Dung
+            </h3>
+            <p>Giáo viên Tiếng Anh, luyện đọc hiểu, từ vựng, ngữ pháp và chiến thuật làm bài.
+            </p>
+          </div>
+        </div>
+        <div class="teacher-card">
+          <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/z7829302985993-4fd8bd6a65d98154d6f171923e6d6607.jpg" alt="Thầy Nguyễn Văn Thái"/>
+          <div class="teacher-info">
+            <span>Hóa học</span>
+            <h3>Thầy Nguyễn Văn Thái
+            </h3>
+            <p>Giáo viên Hóa, giảng dạy kiến thức nền và kỹ năng xử lý câu hỏi khoa học tự nhiên.
+            </p>
+          </div>
+        </div>
+        <div class="teacher-card">
+          <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/z7829302975175-48c5658fefcea20bf35fb5afd4be440c.jpg" alt="Thầy Hạ Nhất Sĩ"/>
+          <div class="teacher-info">
+            <span>Vật lý</span>
+            <h3>Thầy Hạ Nhất Sĩ
+            </h3>
+            <p>Giáo viên Vật lý, luyện tư duy khoa học, phân tích dữ kiện và giải nhanh bài tập.
+            </p>
+          </div>
+        </div>
+        <div class="teacher-card">
+          <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/z7829302966946-2f600d81daca6d45c364d54cffdeefe3.jpg" alt="Thầy Nguyễn Tất Nghiệp"/>
+          <div class="teacher-info">
+            <span>Sinh học</span>
+            <h3>Thầy Nguyễn Tất Nghiệp
+            </h3>
+            <p>Giáo viên Sinh học, hỗ trợ ôn kiến thức nền và dạng bài tư duy khoa học sự sống.
+            </p>
+          </div>
+        </div>
+        <div class="teacher-card">
+          <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/z7829302955419-eeaec5cdfbdb4bce43f5adeef0dacd57.jpg" alt="Cô Nguyễn Phương Thu"/>
+          <div class="teacher-info">
+            <span>Lịch sử</span>
+            <h3>Cô Nguyễn Phương Thu
+            </h3>
+            <p>Giáo viên Lịch sử, giúp học sinh hệ thống kiến thức và rèn tư duy xã hội.
+            </p>
+          </div>
+        </div>
+        <div class="teacher-card">
+          <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/z7829302979602-fb0c20f48641c17acb733268115d701f.jpg" alt="Cô Lê Thị Hồng Quế"/>
+          <div class="teacher-info">
+            <span>Địa lý</span>
+            <h3>Cô Lê Thị Hồng Quế
+            </h3>
+            <p>Giáo viên Địa lý, luyện kỹ năng đọc dữ liệu, biểu đồ và xử lý câu hỏi tổng hợp.
+            </p>
+          </div>
+        </div>
+        <div class="teacher-card">
+          <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/z7829302950929-d3b167774951e9009e29a4e225136339.jpg" alt="Cô Lê Thị Hồng Hạnh"/>
+          <div class="teacher-info">
+            <span>GDKT &amp; Pháp luật</span>
+            <h3>Cô Lê Thị Hồng Hạnh
+            </h3>
+            <p>Giáo viên GDKT &amp; Pháp luật, hỗ trợ tư duy xã hội và phân tích tình huống.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="dang-ky" class="section">
+    <div class="container final-grid">
+      <div class="form-card">
+        <h2>Đăng ký nhận lộ trình cá nhân hóa miễn phí
+        </h2>
+        <form method="POST" action="https://script.google.com/macros/s/AKfycbz1805bu2N9kiE5pEyvckC5lmtkXpBYYjhA4LKkEYJUoRF6AvvOfqoh2_4s9bLeIGaWIA/exec" target="_blank">
+          <input type="text" name="name" placeholder="Họ tên học sinh" required/>
+          <input type="tel" name="phone" placeholder="Số điện thoại" required/>
+          <input type="text" name="grade" placeholder="Lớp hiện tại"/>
+          <select name="exam" required><option value="">Kỳ thi ĐGNL cần cải thiện</option><option>VACT</option><option>Chưa rõ, cần tư vấn thêm</option></select>
+          <button type="submit">NHẬN TƯ VẤN MIỄN PHÍ</button>
+        </form>
+        <a href="https://linkbio.co/dgnlvpedu" target="_blank" rel="noopener" class="direct-link">
+        </a>
+      </div>
+      <div>
+        <div id="ij6zob" class="section-head">
+          <span class="section-label">Thông tin khóa học</span>
+          <h2>Thông tin đăng ký
+          </h2>
+        </div>
+        <div class="faq">
+          <div class="faq-item">
+            <h3>Hình thức học
+            </h3>
+            <p>Học Online qua Zoom, tương tác trực tiếp với giáo viên và sử dụng hệ thống Web VPEDU để học lại, luyện tập, thi thử.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h3>Thời gian học
+            </h3>
+            <p>Các buổi tối trong tuần, phù hợp với lịch học trên trường của học sinh 2K9.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h3>Cách thức đăng ký
+            </h3>
+            <p>Điền form trên landing page hoặc nhắn tin trực tiếp Fanpage để nhận lộ trình cá nhân hóa miễn phí.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h3>Lưu ý ưu đãi
+            </h3>
+            <p>Số lượng ưu đãi có hạn. Secret Box và mức học phí tốt nhất chỉ dành cho nhóm học viên đăng ký sớm.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="vpedu-footer-wrap">
+  <div class="vpedu-footer-container">
+    <div class="vpedu-footer-col vpedu-footer-col-info">
+      <div class="vpedu-footer-logo-box">
+        <img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/z7942557994092-6877a74b58fe299abf02838fba04bb99-1.jpg" alt="Logo" class="vpedu-footer-main-logo">
+      </div>
+      <div class="vpedu-footer-contact-list">
+        <div class="vpedu-footer-contact-item">
+          <div class="vpedu-footer-icon-wrapper"><svg viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M19 4h-3V2h-2v2h-4V2H8v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg></div>
+          <span class="vpedu-footer-text">CÔNG TY TNHH ĐẦU TƯ VÀ PHÁT TRIỂN GIÁO DỤC VNES PRO (VPEDU)</span>
+        </div>
+        <div class="vpedu-footer-contact-item">
+          <div class="vpedu-footer-icon-wrapper"><svg viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M3 5h2v14H3zm4 0h1v14H7zm2 0h3v14H9zm4 0h1v14h-1zm2 0h2v14h-2zm3 0h2v14h-2z"/></svg></div>
+          <span class="vpedu-footer-text">Mã số thuế: 0111395610</span>
+        </div>
+        <div class="vpedu-footer-contact-item">
+          <div class="vpedu-footer-icon-wrapper"><svg viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+          <span class="vpedu-footer-text">Cơ sở 1 (Văn phòng đại diện): Khu 6, Thôn Yên Thị, xã Yên Lãng, Hà Nội<br>Cơ sở 2: Tầng 23, tòa nhà S210, Vinhomes Ocean Park, xã Gia Lâm, Hà Nội<br>Cơ sở 3: Tầng 19, tòa nhà Bluegem tower, xã Thanh Trì, Hà Nội</span>
+        </div>
+        <div class="vpedu-footer-contact-item">
+          <div class="vpedu-footer-icon-wrapper"><svg viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
+          <span class="vpedu-footer-text">Hotline 1: 0835217821<br>Hotline 2: 0943858145</span>
+        </div>
+        <div class="vpedu-footer-contact-item">
+          <div class="vpedu-footer-icon-wrapper"><svg viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+          <span class="vpedu-footer-text">Email: vpedu2026@gmail.com</span>
+        </div>
+      </div>
+    </div>
+    <div class="vpedu-footer-col vpedu-footer-col-links">
+      <h3 class="vpedu-footer-heading">Liên kết nhanh</h3>
+      <ul class="vpedu-footer-list">
+        <li><a href="#it8xq" class="vpedu-footer-link">Giới thiệu VPEDU</a></li>
+        <li><a href="#ly-do" class="vpedu-footer-link">Thông tin về kì thi</a></li>
+        <li><a href="https://vpedu.edu.vn/p/dieu-khoan-dich-vu" target="_blank" rel="noopener" class="vpedu-footer-link">Điều khoản dịch vụ</a></li>
+        <li><a href="https://vpedu.edu.vn/p/chinh-sach-rieng-tu" target="_blank" rel="noopener" class="vpedu-footer-link">Chính sách bảo mật</a></li>
+      </ul>
+      <div class="vpedu-footer-socials">
+        <div class="vpedu-footer-social-box"><div class="vpedu-footer-social-overlay"></div><a href="https://www.facebook.com/share/18KDAZAbxy/" target="_blank" rel="noopener" class="vpedu-footer-social-link" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="#1877F2" xmlns="http://www.w3.org/2000/svg"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg></a></div>
+        <div class="vpedu-footer-social-box"><div class="vpedu-footer-social-overlay"></div><a href="https://youtube.com/@luyenthidgnlvpedu?si=pMuVKE0ZdtNI5wYo" target="_blank" rel="noopener" class="vpedu-footer-social-link" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="#FF0000" xmlns="http://www.w3.org/2000/svg"><path d="M21.582 6.186a2.67 2.67 0 0 0-1.884-1.884C18.04 3.84 12 3.84 12 3.84s-6.04 0-7.698.462a2.67 2.67 0 0 0-1.884 1.884C1.956 7.844 1.956 12 1.956 12s0 4.156.462 5.814a2.67 2.67 0 0 0 1.884 1.884c1.658.462 7.698.462 7.698.462s6.04 0 7.698-.462a2.67 2.67 0 0 0 1.884-1.884c.462-1.658.462-5.814.462-5.814s0-4.156-.462-5.814zm-11.776 8.798V9.016l5.486 2.984-5.486 2.984z"/></svg></a></div>
+        <div class="vpedu-footer-social-box"><div class="vpedu-footer-social-overlay"></div><a href="https://www.tiktok.com/@dgnl.vnesteam?_r=1&_t=ZS-95J6RaDk1EC" target="_blank" rel="noopener" class="vpedu-footer-social-link" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="#000000" xmlns="http://www.w3.org/2000/svg"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.22-1.15 4.34-2.88 5.72-1.64 1.31-3.8 1.9-5.91 1.68-2.2-.2-4.14-1.39-5.34-3.15-1.22-1.78-1.57-4.11-1.01-6.22.58-2.15 2.15-3.9 4.19-4.73 2.05-.83 4.41-.83 6.46 0v4.11c-1.19-.64-2.65-.72-3.91-.25-1.25.46-2.22 1.54-2.55 2.82-.33 1.28.01 2.68.85 3.69.84 1.01 2.18 1.48 3.49 1.27 1.33-.22 2.45-1.13 2.92-2.38.31-.81.33-1.69.33-2.54V.02h-1.16z"/></svg></a></div>
+        <div class="vpedu-footer-social-box"><div class="vpedu-footer-social-overlay"></div><a href="https://zalo.me/84961698429" target="_blank" rel="noopener" class="vpedu-footer-social-link" aria-label="Zalo"><img src="https://file.edubit.vn/storage/d34e4fa1842e94c1eef5e7e04b03ba785880705c/zalo-icon.png" alt="Zalo" class="vpedu-footer-social-img"></a></div>
+      </div>
+    </div>
+    <div class="vpedu-footer-col vpedu-footer-col-support">
+      <h3 class="vpedu-footer-heading">Kết nối với VPEDU</h3>
+      <ul class="vpedu-footer-list">
+        <li><a href="#dang-ky" class="vpedu-footer-link">Hướng dẫn thanh toán</a></li>
+        <li><a href="#dang-ky" class="vpedu-footer-link">Kích hoạt khóa học</a></li>
+        <li><a href="#doi-ngu-giao-vien" class="vpedu-footer-link">Quản lý lớp học</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+  <div class="floating-contact">
+    <a href="https://zalo.me/0835217821" target="_blank" rel="noopener" class="floating-zalo"><span class="floating-icon">Z</span><span>Zalo tư vấn</span></a>
+    <a href="tel:0835217821" class="floating-phone"><span class="floating-icon">☎</span><span>0835 217 821</span></a>
+  </div>
+</body>
+</html>
